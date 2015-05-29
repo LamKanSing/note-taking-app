@@ -10,6 +10,12 @@
       <h2>The same form, inline</h2>
       {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}) }}
       <br>
-      <p>submitted idea: {{ submitted_idea }}</p>
+      <ol>
+        {% for idea in idealist %}
+            <li>{{idea.name}}</li>
+        {% else %}
+            <li>no idea yet</li>
+        {% endfor %}
+      </ol>
   </div>
 {% endblock %}

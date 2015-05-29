@@ -15,11 +15,10 @@ app.config['DATABASE_URL'] = os.environ['DATABASE_URL']
 Bootstrap(app)
 
 db = SQLAlchemy(app)
-db.create_all()
 
 class Idea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    idea = db.Column(db.String(256), unique=True)
+    idea_name = db.Column(db.String(256), unique=True)
 
     def __init__(self, idea):
         self.idea = idea
@@ -27,18 +26,23 @@ class Idea(db.Model):
     def __repr__(self):
         return '<Idea %r>' % self.id
 
+db.create_all()
+
 class IdeaForm(Form):
-    idea = StringField('idea', validators=[DataRequired()])
+    idea_name = StringField('idea', validators=[DataRequired()])
     submit_button = SubmitField('add idea')
 
 @app.route("/", methods=["GET", "POST"])
-def hello():
+def index():
     form = IdeaForm()
-    submitted_idea = '<empty idea field>'
     if form.validate_on_submit():
-        submitted_idea=form.idea.data
+        idea = Idea()
+        idea.idea_name=form.idea_name.data
+        db.session.add(idea)
+        db.session.commit()
 
-    return render_template("index.html", form=form, submitted_idea=submitted_idea)
+    idealist = Idea.query.all()
+    return render_template("index.html", form=form, idealist = idealist)
 
 if __name__ == "__main__":
     app.run(debug=True)

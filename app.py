@@ -11,14 +11,18 @@ app.config['SECRET_KEY']='devkey'
 Bootstrap(app)
 
 
-class MyForm(Form):
+class IdeaForm(Form):
     idea = StringField('idea', validators=[DataRequired()])
     submit_button = SubmitField('add idea')
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def hello():
-    form = MyForm()
-    return render_template("index.html", form=form)
+    form = IdeaForm()
+    submitted_idea = '<empty idea field>'
+    if form.validate_on_submit():
+        submitted_idea=form.idea.data
+
+    return render_template("index.html", form=form, submitted_idea=submitted_idea)
 
 if __name__ == "__main__":
     app.run(debug=True)

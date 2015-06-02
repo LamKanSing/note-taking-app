@@ -5,7 +5,7 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.fields import FloatField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional, NumberRange, Email
 from flask.ext.sqlalchemy import SQLAlchemy
 import os
 
@@ -32,8 +32,12 @@ db.create_all()
 
 class IdeaForm(Form):
     idea_name = StringField('idea', validators=[DataRequired()])
-    testing = StringField('testing', validators=[DataRequired()])
+    testing = FloatField('price', validators=[NumberRange
+                                              (min=0.3, max=10.3, message='between 0.3 to 10.3, inclusive')])
+    email = StringField('email', validators=[Email(), 'it is not an email'])
     submit_button = SubmitField('add idea')
+    #how about a custom validator.....
+    
 
 @app.route("/", methods=["GET", "POST"])
 def index():

@@ -2,11 +2,12 @@ from flask import Flask
 from flask import render_template
 from flask_bootstrap import Bootstrap
 
-from flask_wtf import Form, RecaptchaField
+from flask_wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.fields import FloatField
 from wtforms.validators import DataRequired
 from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.wtf.recaptcha import RecaptchaField
 
 import os
 
@@ -14,8 +15,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'devkey'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
-RECAPTCHA_PARAMETERS = {'hl': 'zh', 'render': 'explicit'}
-RECAPTCHA_DATA_ATTRS = {'theme': 'dark'}
+RECAPTCHA_PUBLIC_KEY = '6Lc0vgcTAAAAAG4YGZ60-Cox3OYt-qOg4O1rxVbR'
+RECAPTCHA_PRIVATE_KEY = '6Lc0vgcTAAAAAKePomdmMUBX8UCf3LOpho64_1jO'
 
 Bootstrap(app)
 
@@ -35,7 +36,7 @@ db.create_all()
 
 class IdeaForm(Form):
     idea_name = StringField('idea', validators=[DataRequired()])
-    #recaptcha = RecaptchaField()
+    recaptcha = RecaptchaField()
     testing = StringField('testing', validators=[DataRequired()])
     submit_button = SubmitField('add idea')
 

@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template
 from flask_bootstrap import Bootstrap
 
-from flask_wtf import Form
+from flask_wtf import Form, RecaptchaField
 from wtforms import StringField, SubmitField
 from wtforms.fields import FloatField
 from wtforms.validators import DataRequired
@@ -13,6 +13,10 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'devkey'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+
+RECAPTCHA_PARAMETERS = {'hl': 'zh', 'render': 'explicit'}
+RECAPTCHA_DATA_ATTRS = {'theme': 'dark'}
+
 Bootstrap(app)
 
 db = SQLAlchemy(app)
@@ -31,7 +35,7 @@ db.create_all()
 
 class IdeaForm(Form):
     idea_name = StringField('idea', validators=[DataRequired()])
-
+    recaptcha = RecaptchaField()
     submit_button = SubmitField('add idea')
 
 @app.route("/", methods=["GET", "POST"])

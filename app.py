@@ -37,7 +37,7 @@ class IdeaForm(Form):
     email = StringField('email', validators=[Email(), 'it is not an email'])
     submit_button = SubmitField('add idea')
     #how about a custom validator.....
-    
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -46,6 +46,8 @@ def index():
         idea = Idea(form.idea_name.data)
         db.session.add(idea)
         db.session.commit()
+    elif form.is_submitted() and not form.validate():
+        return render_template("error.html")
 
     idealist = Idea.query.all()
     return render_template("index.html", form=form, idealist = idealist)

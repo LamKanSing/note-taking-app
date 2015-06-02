@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap
 
 from flask_wtf import Form
 from wtforms import StringField, SubmitField
+from wtforms.fields import FloatField
 from wtforms.validators import DataRequired
 from flask.ext.sqlalchemy import SQLAlchemy
 
@@ -11,7 +12,7 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'devkey'
-app.config['DATABASE_URL'] = os.environ['DATABASE_URL']
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 Bootstrap(app)
 
 db = SQLAlchemy(app)
@@ -21,7 +22,7 @@ class Idea(db.Model):
     idea_name = db.Column(db.String(256), unique=True)
 
     def __init__(self, idea):
-        self.idea = idea
+        self.idea_name = idea
 
     def __repr__(self):
         return '<Idea %r>' % self.id
@@ -30,14 +31,14 @@ db.create_all()
 
 class IdeaForm(Form):
     idea_name = StringField('idea', validators=[DataRequired()])
+
     submit_button = SubmitField('add idea')
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     form = IdeaForm()
     if form.validate_on_submit():
-        idea = Idea()
-        idea.idea_name=form.idea_name.data
+        idea = Idea(form.idea_name.data)
         db.session.add(idea)
         db.session.commit()
 

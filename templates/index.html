@@ -5,14 +5,14 @@
 {% block content %}
 
   <div class="container">
-      <h1>Hello, Bootstrap</h1>
+      <h1>Today is 2 nd of june</h1>
 
       <h2>The same form, inline</h2>
       {{ wtf.quick_form(form, button_map={'submit_button': 'primary'}) }}
       <br>
       <ol>
         {% for idea in idealist %}
-            <li>{{idea.name}}</li>
+            <li>{{idea.idea_name}}</li>
         {% else %}
             <li>no idea yet</li>
         {% endfor %}

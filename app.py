@@ -46,7 +46,7 @@ def index():
         idea = Idea(form.idea_name.data)
         db.session.add(idea)
         db.session.commit()
-    elif form.is_submitted() and not form.validate():
+    elif not form.validate():
         return redirect("http://www.google.com", code=302)
 
     idealist = Idea.query.all()

@@ -35,7 +35,8 @@ db.create_all()
 
 class IdeaForm(Form):
     idea_name = StringField('idea', validators=[DataRequired()])
-    recaptcha = RecaptchaField()
+    #recaptcha = RecaptchaField()
+    testing = StringField('testing', validators=[DataRequired()])
     submit_button = SubmitField('add idea')
 
 @app.route("/", methods=["GET", "POST"])

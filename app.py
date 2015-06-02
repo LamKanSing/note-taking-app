@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect
 from flask import render_template
 from flask_bootstrap import Bootstrap
 
@@ -47,7 +47,7 @@ def index():
         db.session.add(idea)
         db.session.commit()
     elif form.is_submitted() and not form.validate():
-        return render_template("error.html")
+        return redirect("http://www.google.com", code=302)
 
     idealist = Idea.query.all()
     return render_template("index.html", form=form, idealist = idealist)
